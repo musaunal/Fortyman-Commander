@@ -3,8 +3,12 @@ package com.mudan.fortyman.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Quaternion;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -28,6 +32,8 @@ public class PlayState implements Screen{
     private boolean ready;
     private float timer;
 
+
+
     public PlayState(Fortyman fortyman) {
         this.fortyman = fortyman;
         camera = new OrthographicCamera();
@@ -40,12 +46,12 @@ public class PlayState implements Screen{
     }
 
     public void createSoldiers(int miktar){
-        for (int i=0; i<40; i++){
+        for (int i=0; i<miktar; i++){
             askerler.add(new Players(i+1));
             askerler.get(i).setPosition(0,0);
         }
-        askerler.get(0).makeMefta();
-        askerler.get(1).makeMefta();
+        askerler.get(0).setState(Players.Vaziyet.MEFTA);
+        askerler.get(1).setState(Players.Vaziyet.MEFTA);
         int sayac =0, hizaciX = 560, hizaciY = 480;
         int temp = hizaciX;
         for (int i=0; i<4; i++){
@@ -58,7 +64,6 @@ public class PlayState implements Screen{
             hizaciX = temp ;
             hizaciY-= 32;
         }
-
     }
 
     public boolean defaultFormasyon(){             // dikdörtgen dizilim
@@ -149,26 +154,28 @@ public class PlayState implements Screen{
         }
     }*/
 
-    @Override
-    public void render(float delta) {
-        handleInput();
+    public void formatcı (){
         if (formatDegisMi){
-
             if (!ready) {
                 switch (vaziyet){
                     case DEFAULT:
                         ready = defaultFormasyon();
-                    break;
+                        break;
                     case KISKAC:
                         ready = kıskacFormasyon();
-                    break;
-
+                        break;
                 }
             }
             else{
                 formatDegisMi = false;
             }
         }
+    }
+
+    @Override
+    public void render(float delta) {
+        handleInput();
+        formatcı();
 
         Gdx.gl.glClearColor(128 / 255f, 187 / 255f, 96 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
