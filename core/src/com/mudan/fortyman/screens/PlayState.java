@@ -6,6 +6,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector2;
@@ -44,6 +46,8 @@ public class PlayState implements Screen{
     private Body bt;
     private World world;
     private Box2DDebugRenderer renderer;
+    private Array<Vector2> bitki;
+    private TextureRegion tBitki;
 
     public PlayState(Fortyman fortyman) {
         this.fortyman = fortyman;
@@ -53,12 +57,13 @@ public class PlayState implements Screen{
         camera.setToOrtho(false);
 
         world = new World(new Vector2(0,0),false);
-        askerler = new Array<Players>();
         createSoldiers(40);
         vaziyet = DEFAULT;
         formatDegisMi = false;
         kameraOdakMı = true;
         timer = 0;
+        createBitki();
+
 /*
         BodyDef b= new BodyDef();
         b.position.set(400,720);
@@ -74,7 +79,19 @@ public class PlayState implements Screen{
         renderer = new Box2DDebugRenderer();
     }
 
+    public void createBitki (){
+        tBitki = new TextureRegion(new Texture("va.png"), 64,32);
+        bitki = new Array<Vector2>();
+        float y=800;
+        for (int i=0; i<40; i++){
+            if (i%10 == 0)
+                y -= 80;
+            bitki.add(new Vector2((i%10)*90,y));
+        }
+    }
+
     public void createSoldiers(int miktar){
+        askerler = new Array<Players>();
         for (int i=0; i<miktar; i++){
             askerler.add(new Players(i+1, this));
             askerler.get(i).setPosition(0 ,0 );
@@ -199,7 +216,7 @@ public class PlayState implements Screen{
         world.step(1/60f, 6, 2); // bunları oyna
         if (kameraOdakMı) {
             camera.position.x = askerler.get(0).getX() -144;
-            camera.position.y = askerler.get(0).getY() +200;
+            camera.position.y = askerler.get(0).getY() +150;
             camera.update();
         }
     }
@@ -235,6 +252,8 @@ public class PlayState implements Screen{
         for (Players asker : askerler){
             asker.draw(fortyman.batch);
         }
+        for (Vector2 v : bitki)
+            fortyman.batch.draw(tBitki, v.x,v.y);
         fortyman.batch.end();
     }
 
