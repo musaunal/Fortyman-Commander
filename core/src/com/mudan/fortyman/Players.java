@@ -3,6 +3,14 @@ package com.mudan.fortyman;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
+import com.mudan.fortyman.screens.PlayState;
+
 import java.util.HashMap;
 
 /**
@@ -17,8 +25,11 @@ public class Players extends Sprite {
     protected boolean meftaMı;
     private int durumSayaci;
 
+    private World world;
+    public Body body;
 
-    public Players(int askerID) {
+    public Players(int askerID, PlayState state) {
+        world = state.getWorld();
         states = new HashMap<Vaziyet, TextureRegion>();
         states.put(Vaziyet.DURGUN, new TextureRegion(new Texture("warrior1.png"), 0,0,32,32));
         states.put(Vaziyet.HUCUM, new TextureRegion(new Texture("warrior1.png"), 96,0,32,32));
@@ -30,12 +41,13 @@ public class Players extends Sprite {
         setBounds(0,0,32,32);
         setRegion(states.get(Vaziyet.DURGUN));
         durumSayaci =0;
+        bodyify();
     }
 
-    public void hizayaSok(int x, int y){
+    public void hizayaSok(float x, float y){
         if((getX() != x || getY() != y)){
-            setX(getX() < x ? getX()+1 : getX()-1 );
-            setY(getY() < y ? getY()+1 : getY()-1);
+            setX(getX() < x ? getX()+1 : getX()-1  );
+            setY(getY() < y ? getY()+1 : getY()-1 );
         }
     }
 
@@ -43,5 +55,19 @@ public class Players extends Sprite {
         onceki = suanki;
         suanki = vaziyet;
         setRegion(states.get(vaziyet));
+    }
+
+    public void bodyify (){
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set(getX(),getY());
+        bodyDef.angle = 0;
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        body = world.createBody(bodyDef);
+
+        FixtureDef fdef = new FixtureDef();
+        PolygonShape shape= new PolygonShape();
+        shape.setAsBox(32,32);
+        fdef.shape = shape;
+        body.createFixture(fdef);
     }
 }
