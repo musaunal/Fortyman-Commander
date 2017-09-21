@@ -1,4 +1,4 @@
-package com.mudan.fortyman;
+package com.mudan.fortyman.Elemanlar;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -51,6 +51,8 @@ public class Players extends Sprite {
         }
     }
 
+    public void update (float dt){}
+
     public void setState(Vaziyet vaziyet){
         onceki = suanki;
         suanki = vaziyet;
@@ -69,5 +71,9 @@ public class Players extends Sprite {
         shape.setAsBox(32,32);
         fdef.shape = shape;
         body.createFixture(fdef);
+    }
+
+    public int getAskerID(){
+        return askerID;
     }
 }
