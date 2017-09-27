@@ -3,6 +3,7 @@ package com.mudan.fortyman.Elemanlar;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
@@ -24,12 +25,9 @@ public class Players extends Sprite {
     protected int askerID;
     protected boolean meftaMı;
     private int durumSayaci;
+    private Rectangle kare;
 
-    private World world;
-    public Body body;
-
-    public Players(int askerID, PlayState state) {
-        world = state.getWorld();
+    public Players(int askerID, PlayState state, float x , float y) {
         states = new HashMap<Vaziyet, TextureRegion>();
         states.put(Vaziyet.DURGUN, new TextureRegion(new Texture("warrior1.png"), 0,0,32,32));
         states.put(Vaziyet.HUCUM, new TextureRegion(new Texture("warrior1.png"), 96,0,32,32));
@@ -38,10 +36,10 @@ public class Players extends Sprite {
         this.askerID = askerID;
 
         suanki = onceki = Vaziyet.DURGUN;
-        setBounds(0,0,32,32);
+        setBounds(x,y,32,32);
         setRegion(states.get(Vaziyet.DURGUN));
         durumSayaci =0;
-        bodyify();
+        kare = new Rectangle(getX(), getY() ,getWidth(), getHeight());
     }
 
     public void hizayaSok(float x, float y){
@@ -51,7 +49,9 @@ public class Players extends Sprite {
         }
     }
 
-    public void update (float dt){}
+    public void update (float dt){
+        kare.setPosition(getX(),getY());
+    }
 
     public void setState(Vaziyet vaziyet){
         onceki = suanki;
@@ -59,6 +59,11 @@ public class Players extends Sprite {
         setRegion(states.get(vaziyet));
     }
 
+    public void collide(Rectangle diger){
+
+    }
+
+/*
     public void bodyify (){
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(getX(),getY());
@@ -72,6 +77,7 @@ public class Players extends Sprite {
         fdef.shape = shape;
         body.createFixture(fdef);
     }
+*/
 
     public int getAskerID(){
         return askerID;

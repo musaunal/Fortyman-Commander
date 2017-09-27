@@ -40,9 +40,6 @@ public class PlayState implements Screen{
     private boolean kameraOdakMı;
     private float timer;
 
-    private World world;
-    private Box2DDebugRenderer renderer;
-
     public PlayState(Fortyman fortyman) {
         this.fortyman = fortyman;
         camera = new OrthographicCamera();
@@ -50,7 +47,6 @@ public class PlayState implements Screen{
         camera.position.set(viewport.getWorldWidth()/2 , viewport.getWorldHeight()/2 ,0);
         camera.setToOrtho(false);
 
-        world = new World(new Vector2(0,0),false);
         createSoldiers(40);
         vaziyet = DEFAULT;
         formatDegisMi = false;
@@ -58,7 +54,6 @@ public class PlayState implements Screen{
         timer = 0;
         createBitki();
 
-        renderer = new Box2DDebugRenderer();
     }
 
     public void createBitki (){
@@ -73,39 +68,20 @@ public class PlayState implements Screen{
 
     public void createSoldiers(int miktar){
         askerler = new Array<Players>();
+        float hizaciX = 760, hizaciY = 312;
         for (int i=0; i<miktar; i++){
-            askerler.add(new Players(i+1, this));
-            askerler.get(i).setPosition(0 ,0 );
-        }
-        askerler.get(0).setState(Players.Vaziyet.MEFTA);
-        askerler.get(1).setState(Players.Vaziyet.MEFTA);
-        int sayac =0;
-        float hizaciX = 760, hizaciY = 280;
-        float temp = hizaciX;
-        for (int i=0; i<4; i++){
-            for (int j =0; j<10; j++){
-                askerler.get(sayac).setPosition(hizaciX,hizaciY);
-                hizaciX -= 32;
-                sayac++;
-            }
-            hizaciX = temp ;
-            hizaciY-= 32;
+            if (i%10 == 0)
+                hizaciY -= 32;
+            askerler.add(new Players(i, this, hizaciX - i%10*32 , hizaciY ));
         }
     }
 
     public boolean defaultFormasyon(){             // dikdörtgen dizilim
-        int sayac =0;
-        float hizaciX = askerler.get(0).getX(),
-            hizaciY = askerler.get(0).getY(),
-            temp = hizaciX;
-        for (int i=0; i<4; i++){
-            for (int j =0; j<10; j++){
-                askerler.get(sayac).hizayaSok(hizaciX, hizaciY);
-                hizaciX -= 32;
-                sayac++;
-            }
-            hizaciX = temp ;
-            hizaciY-= 32;
+        float hizaciX = askerler.get(0).getX(), hizaciY = askerler.get(0).getY()+32;
+        for (int i=0; i<40; i++){
+            if (i %10 == 0)
+                hizaciY -=32;
+            askerler.get(i).hizayaSok(hizaciX - i%10*32, hizaciY);
         }
         if(askerler.get(0).getX() - askerler.get(1).getX() == 32)
             return true;
@@ -194,7 +170,8 @@ public class PlayState implements Screen{
         handleInput();
         camera.update();
         formatcı();
-        world.step(1/60f, 6, 2); // bunları oyna
+        for (Players asker :askerler)
+            asker.update(dt);
         if (kameraOdakMı) {
             camera.update();
             if ((int)camera.position.x != (int)askerler.get(0).getX() -144 )     // eşitse posi
@@ -226,7 +203,6 @@ public class PlayState implements Screen{
     public void render(float delta) {
         update(delta);
 
-        renderer.render(world, camera.combined);
         fortyman.batch.setProjectionMatrix(camera.combined);
 
         Gdx.gl.glClearColor(128 / 255f, 187 / 255f, 96 / 255f, 1);
@@ -243,10 +219,6 @@ public class PlayState implements Screen{
     @Override
     public void dispose() {
 
-    }
-
-    public World getWorld(){
-        return world;
     }
 
     @Override
