@@ -18,7 +18,6 @@ import com.mudan.fortyman.screens.PlayState;
 
 public class Bitki extends Sprite {
     private TextureRegion tBitki;
-    protected Rectangle kare;
     private Body body;
     private World world;
 
@@ -33,7 +32,7 @@ public class Bitki extends Sprite {
 
    public void bodyify(){
         BodyDef b= new BodyDef();
-        b.position.set(getX(), getY());
+        b.position.set(getX()+getWidth()/2, getY()+getHeight()/2);
         b.type = BodyDef.BodyType.StaticBody;
         body = world.createBody(b);
 

@@ -5,21 +5,15 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mudan.fortyman.Elemanlar.Bitki;
+import com.mudan.fortyman.Elemanlar.Piyade;
 import com.mudan.fortyman.Fortyman;
-import com.mudan.fortyman.Elemanlar.Players;
 
 import static com.mudan.fortyman.screens.PlayState.Format.*;
 
@@ -31,14 +25,13 @@ public class PlayState implements Screen{
     private OrthographicCamera camera;
     private Viewport viewport;
     private Fortyman fortyman;
-    private Array<Players> askerler;
+    private Array<Piyade> askerler;
     private Array<Bitki> bitkiler;
     public enum Format {DEFAULT , KISKAC}
     private Format vaziyet;
     private boolean formatDegisMi;
     private boolean ready;      // format değişimi bitti mi
     private boolean kameraOdakMı;
-    private float timer;
 
     private World world;
     private Box2DDebugRenderer b2dr;
@@ -57,7 +50,6 @@ public class PlayState implements Screen{
         vaziyet = DEFAULT;
         formatDegisMi = false;
         kameraOdakMı = true;
-        timer = 0;
         createBitki();
 
     }
@@ -73,12 +65,12 @@ public class PlayState implements Screen{
     }
 
     public void createSoldiers(int miktar){
-        askerler = new Array<Players>();
+        askerler = new Array<Piyade>();
         float hizaciX = 760, hizaciY = 312;
         for (int i=0; i<miktar; i++){
             if (i%10 == 0)
                 hizaciY -= 32;
-            askerler.add(new Players(i,this, hizaciX - i%10*32 , hizaciY ));
+            askerler.add(new Piyade(i,this, hizaciX - i%10*32 , hizaciY ));
         }
     }
 
@@ -114,7 +106,7 @@ public class PlayState implements Screen{
             hizaciX = temp;
             simetri = -288;
         }
-   //     hizaciY -= 32;            // son safdan çnce boşluk atar
+   //     hizaciY -= 32;            // son safdan önce boşluk atar
         for (int i=sayac; i<askerler.size; i++){
             askerler.get(i).hizayaSok(hizaciX,hizaciY);
             hizaciX -= 32;
@@ -127,19 +119,20 @@ public class PlayState implements Screen{
     }
 
     public void handleInput(){
-        if (Gdx.input.isKeyPressed(Input.Keys.W)){
-            for (Players asker : askerler)
-                asker.setPosition(asker.getX(), asker.getY()+1);
+        /*if (Gdx.input.isKeyPressed(Input.Keys.W)){
+            for (Piyade asker : askerler)
+                asker.body.applyLinearImpulse(new Vector2(0,1), asker.body.getWorldCenter(), true);
         }else if (Gdx.input.isKeyPressed(Input.Keys.S)){
-            for (Players asker : askerler)
+            for (Piyade asker : askerler)
                 asker.setPosition(asker.getX(), asker.getY()-1);
         }if (Gdx.input.isKeyPressed(Input.Keys.A)){
-            for (Players asker : askerler)
+            for (Piyade asker : askerler)
                 asker.setPosition(asker.getX()-1, asker.getY());
-        }else if (Gdx.input.isKeyPressed(Input.Keys.D)){
-            for (Players asker : askerler)
-                asker.setPosition(asker.getX()+1, asker.getY());
-        }if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)){
+        }else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            for (Piyade asker : askerler)
+                asker.setPosition(asker.getX() + 1, asker.getY());
+        }*/
+        if (Gdx.input.isKeyPressed(Input.Keys.NUM_1)){
             vaziyet = DEFAULT;
             formatDegisMi = true;
             ready = false;
@@ -148,7 +141,7 @@ public class PlayState implements Screen{
             formatDegisMi = true;
             ready = false;
         }if (Gdx.input.isKeyPressed(Input.Keys.E)){      // koordiantları loglar
-            for (Players asker : askerler) {
+            for (Piyade asker : askerler) {
                 Gdx.app.log("sayı"+asker.getAskerID(), ": " + asker.getX() + " " + asker.getY());
             }
             Gdx.app.log("came" , ""+camera.position.x+ " "+camera.position.y);
@@ -176,8 +169,8 @@ public class PlayState implements Screen{
         handleInput();
         camera.update();
         formatcı();
-        world.step(1/60f, 6, 2);
-        for (Players asker :askerler)
+        world.step(1, 6, 2);        // en soldaki elemanı küçülttükçe alengirli hesaplamalara giriyor küçülme fazla
+        for (Piyade asker :askerler)
             asker.update(dt);
 
         if (kameraOdakMı) {
@@ -217,7 +210,7 @@ public class PlayState implements Screen{
         fortyman.batch.setProjectionMatrix(camera.combined);
 
         fortyman.batch.begin();
-        for (Players asker : askerler){
+        for (Piyade asker : askerler){
             asker.draw(fortyman.batch);
         }
         for (Bitki b : bitkiler)
