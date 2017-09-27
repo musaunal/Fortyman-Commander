@@ -23,11 +23,11 @@ public class Players extends Sprite {
     public enum Vaziyet {DURGUN , MEFTA ,HUCUM ,KOS}
     protected Vaziyet suanki , onceki;
     protected int askerID;
-    protected boolean meftaMı;
-    private int durumSayaci;
-    private Rectangle kare;
+    private World world;
+    public Body body;
 
     public Players(int askerID, PlayState state, float x , float y) {
+        this.world = state.getWorld();
         states = new HashMap<Vaziyet, TextureRegion>();
         states.put(Vaziyet.DURGUN, new TextureRegion(new Texture("warrior1.png"), 0,0,32,32));
         states.put(Vaziyet.HUCUM, new TextureRegion(new Texture("warrior1.png"), 96,0,32,32));
@@ -38,8 +38,7 @@ public class Players extends Sprite {
         suanki = onceki = Vaziyet.DURGUN;
         setBounds(x,y,32,32);
         setRegion(states.get(Vaziyet.DURGUN));
-        durumSayaci =0;
-        kare = new Rectangle(getX(), getY() ,getWidth(), getHeight());
+        bodyify();
     }
 
     public void hizayaSok(float x, float y){
@@ -50,7 +49,7 @@ public class Players extends Sprite {
     }
 
     public void update (float dt){
-        kare.setPosition(getX(),getY());
+
     }
 
     public void setState(Vaziyet vaziyet){
@@ -59,11 +58,6 @@ public class Players extends Sprite {
         setRegion(states.get(vaziyet));
     }
 
-    public void collide(Rectangle diger){
-
-    }
-
-/*
     public void bodyify (){
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(getX(),getY());
@@ -77,7 +71,6 @@ public class Players extends Sprite {
         fdef.shape = shape;
         body.createFixture(fdef);
     }
-*/
 
     public int getAskerID(){
         return askerID;

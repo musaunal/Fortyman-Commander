@@ -36,9 +36,12 @@ public class PlayState implements Screen{
     public enum Format {DEFAULT , KISKAC}
     private Format vaziyet;
     private boolean formatDegisMi;
-    private boolean ready;
+    private boolean ready;      // format değişimi bitti mi
     private boolean kameraOdakMı;
     private float timer;
+
+    private World world;
+    private Box2DDebugRenderer b2dr;
 
     public PlayState(Fortyman fortyman) {
         this.fortyman = fortyman;
@@ -46,6 +49,9 @@ public class PlayState implements Screen{
         viewport = new FitViewport(Fortyman.WITDH , Fortyman.HEIGHT , camera);
         camera.position.set(viewport.getWorldWidth()/2 , viewport.getWorldHeight()/2 ,0);
         camera.setToOrtho(false);
+
+        world = new World(new Vector2(0,0), false);
+        b2dr = new Box2DDebugRenderer();
 
         createSoldiers(40);
         vaziyet = DEFAULT;
@@ -72,7 +78,7 @@ public class PlayState implements Screen{
         for (int i=0; i<miktar; i++){
             if (i%10 == 0)
                 hizaciY -= 32;
-            askerler.add(new Players(i, this, hizaciX - i%10*32 , hizaciY ));
+            askerler.add(new Players(i,this, hizaciX - i%10*32 , hizaciY ));
         }
     }
 
@@ -170,8 +176,10 @@ public class PlayState implements Screen{
         handleInput();
         camera.update();
         formatcı();
+        world.step(1/60f, 6, 2);
         for (Players asker :askerler)
             asker.update(dt);
+
         if (kameraOdakMı) {
             camera.update();
             if ((int)camera.position.x != (int)askerler.get(0).getX() -144 )     // eşitse posi
@@ -202,11 +210,12 @@ public class PlayState implements Screen{
     @Override
     public void render(float delta) {
         update(delta);
-
-        fortyman.batch.setProjectionMatrix(camera.combined);
-
         Gdx.gl.glClearColor(128 / 255f, 187 / 255f, 96 / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        b2dr.render(world, camera.combined);
+        fortyman.batch.setProjectionMatrix(camera.combined);
+
         fortyman.batch.begin();
         for (Players asker : askerler){
             asker.draw(fortyman.batch);
@@ -244,5 +253,9 @@ public class PlayState implements Screen{
     @Override
     public void hide() {
 
+    }
+
+    public World getWorld(){
+        return world;
     }
 }
