@@ -75,7 +75,7 @@ public class PlayState implements Screen{
     }
 
     public boolean defaultFormasyon(){             // dikdörtgen dizilim
-        float hizaciX = askerler.get(0).getX(), hizaciY = askerler.get(0).getY()+32;
+        float hizaciX = askerler.get(0).body.getPosition().x, hizaciY = askerler.get(0).body.getPosition().y+32;
         for (int i=0; i<40; i++){
             if (i %10 == 0)
                 hizaciY -=32;
@@ -89,8 +89,8 @@ public class PlayState implements Screen{
 
     public boolean kıskacFormasyon(){
         int sayac =0;
-        float hizaciX = askerler.get(0).getX(),
-            hizaciY = askerler.get(0).getY(),
+        float hizaciX = askerler.get(0).body.getPosition().x,
+            hizaciY = askerler.get(0).body.getPosition().y,
             simetri = -288,
             temp = hizaciX;
         for (int i=1; i<6; i++) {
@@ -106,7 +106,7 @@ public class PlayState implements Screen{
             hizaciX = temp;
             simetri = -288;
         }
-   //     hizaciY -= 32;            // son safdan önce boşluk atar
+
         for (int i=sayac; i<askerler.size; i++){
             askerler.get(i).hizayaSok(hizaciX,hizaciY);
             hizaciX -= 32;

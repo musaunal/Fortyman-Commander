@@ -39,30 +39,19 @@ public class Piyade extends AskerKalıp {
     }
 
     public void hizayaSok(float x, float y) {       // sıkıntı burada
-        boolean Xstop = false, Ystop = false;
-        if (body.getPosition().x > x - 1 && body.getPosition().x < x + 1) {
-            Xstop = true;
-            body.setLinearVelocity(0,body.getLinearVelocity().y);
+        if (body.getPosition().x > x - 1 && body.getPosition().x < x + 1 && body.getPosition().y > y - 1 && body.getPosition().y < y + 1) {
+            body.setLinearVelocity(0, 0);
+            return;
         }
-        if (body.getPosition().y > y - 1 && body.getPosition().y < y + 1){
-            Ystop = true;
-            body.setLinearVelocity(body.getLinearVelocity().x,0);
-        }if (!Xstop)
-            if (body.getPosition().x < x )
-                body.applyLinearImpulse(new Vector2(0.5f,0),body.getWorldCenter(),true);
-            if (body.getPosition().x > x )
-                body.applyLinearImpulse(new Vector2(-0.5f,0),body.getWorldCenter(),true);
-        if (!Ystop)
-            if (body.getPosition().y < y)
-                body.applyLinearImpulse(new Vector2(0,0.5f),body.getWorldCenter(), true);
-            if (body.getPosition().y > y)
-                body.applyLinearImpulse(new Vector2(0,-0.5f),body.getWorldCenter(), true);
-        if (Xstop)
-            body.setLinearVelocity(0,body.getLinearVelocity().y);
-        if (Ystop)
-            body.setLinearVelocity(body.getLinearVelocity().x,0);
+        if (body.getPosition().x < x)
+            body.applyLinearImpulse(new Vector2(0.5f, 0), body.getWorldCenter(), true);
+        if (body.getPosition().x > x)
+            body.applyLinearImpulse(new Vector2(-0.5f, 0), body.getWorldCenter(), true);
+        if (body.getPosition().y < y)
+            body.applyLinearImpulse(new Vector2(0, 0.5f), body.getWorldCenter(), true);
+        if (body.getPosition().y > y)
+            body.applyLinearImpulse(new Vector2(0, -0.5f), body.getWorldCenter(), true);
     }
-
     /*
             if((getX() != x || getY() != y)){
             setX(getX() < x ? getX()+1 : getX()-1 );
@@ -91,7 +80,8 @@ public class Piyade extends AskerKalıp {
         }if (Gdx.input.isKeyPressed(Input.Keys.NUM_5))
             if (askerID == 39)
                 hizayaSok(250,250);
-        restitution();
+
+    //    restitution();
         setPosition(body.getPosition().x-getWidth()/2, body.getPosition().y-getHeight()/2);
     }
 
