@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mudan.fortyman.Fortyman;
 import com.mudan.fortyman.screens.PlayState;
 
 import java.util.HashMap;
@@ -39,7 +40,13 @@ public class Piyade extends AskerKalıp {
     }
 
     public void hizayaSok(float x, float y) {       // sıkıntı burada
-        if (body.getPosition().x > x - 1 && body.getPosition().x < x + 1 && body.getPosition().y > y - 1 && body.getPosition().y < y + 1) {
+        if (!(body.getPosition().x > x-0.3f && body.getPosition().x < x+0.3f) && !(body.getPosition().y > y-0.3f && body.getPosition().y <y-0.3f)) {
+            body.setTransform(body.getPosition().x < x ? body.getPosition().x +1 : body.getPosition().x -1 ,
+            body.getPosition().y < y ? body.getPosition().y +1 : body.getPosition().y - 1 , 0);
+        }
+    }
+
+    /*   if (body.getPosition().x > x - 1 && body.getPosition().x < x + 1 && body.getPosition().y > y - 1 && body.getPosition().y < y + 1) {
             body.setLinearVelocity(0, 0);
             return;
         }
@@ -51,13 +58,8 @@ public class Piyade extends AskerKalıp {
             body.applyLinearImpulse(new Vector2(0, 0.5f), body.getWorldCenter(), true);
         if (body.getPosition().y > y)
             body.applyLinearImpulse(new Vector2(0, -0.5f), body.getWorldCenter(), true);
-    }
-    /*
-            if((getX() != x || getY() != y)){
-            setX(getX() < x ? getX()+1 : getX()-1 );
-            setY(getY() < y ? getY()+1 : getY()-1 );
-        }
-    */
+    }*/
+
     public void update (float dt){
         if (Gdx.input.isKeyPressed(Input.Keys.W)){
             if (Gdx.input.isKeyPressed(Input.Keys.D))
@@ -81,7 +83,7 @@ public class Piyade extends AskerKalıp {
             if (askerID == 39)
                 hizayaSok(250,250);
 
-    //    restitution();
+        restitution();
         setPosition(body.getPosition().x-getWidth()/2, body.getPosition().y-getHeight()/2);
     }
 
@@ -108,10 +110,12 @@ public class Piyade extends AskerKalıp {
         body = world.createBody(bodyDef);
 
         FixtureDef fdef = new FixtureDef();
+        fdef.filter.categoryBits = Fortyman.ASKER;
+        fdef.filter.maskBits = Fortyman.NESNE;
         PolygonShape shape= new PolygonShape();
         shape.setAsBox(8,8);
         fdef.shape = shape;
-        body.createFixture(fdef);
+        body.createFixture(fdef).setUserData(this);
     }
 
     public int getAskerID(){

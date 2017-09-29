@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mudan.fortyman.CollisionHandler;
 import com.mudan.fortyman.Elemanlar.Bitki;
 import com.mudan.fortyman.Elemanlar.Piyade;
 import com.mudan.fortyman.Fortyman;
@@ -45,6 +46,7 @@ public class PlayState implements Screen{
 
         world = new World(new Vector2(0,0), false);
         b2dr = new Box2DDebugRenderer();
+        world.setContactListener(new CollisionHandler());
 
         createSoldiers(40);
         vaziyet = DEFAULT;
@@ -81,7 +83,7 @@ public class PlayState implements Screen{
                 hizaciY -=32;
             askerler.get(i).hizayaSok(hizaciX - i%10*32, hizaciY);
         }
-        if(askerler.get(0).getX() - askerler.get(1).getX() == 32)
+        if(Math.abs(askerler.get(0).getX() - askerler.get(1).getX() -32) <= 2)
             return true;
         else
             return false;
@@ -112,7 +114,7 @@ public class PlayState implements Screen{
             hizaciX -= 32;
         }
 
-        if(askerler.get(0).getX() - askerler.get(1).getX() == 288)
+        if(Math.abs(askerler.get(0).getX() - askerler.get(1).getX() -288) <= 2)  // aradaki fark 0-2 arasında mı ?
             return true;
         else
             return false;

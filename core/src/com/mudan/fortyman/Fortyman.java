@@ -9,8 +9,11 @@ public class Fortyman extends Game {
 	public  static int WITDH = 800;
 	public  static int HEIGHT = 800;
 	public  static final String TITLE = "FORTY";
-
 	public SpriteBatch batch;
+
+	public static final short NESNE = 2;
+	public static final short ASKER = 4;
+
 
 	@Override
 	public void create () {

@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.mudan.fortyman.Fortyman;
 import com.mudan.fortyman.screens.PlayState;
 
 /**
@@ -37,9 +38,11 @@ public class Bitki extends Sprite {
         body = world.createBody(b);
 
         FixtureDef f = new FixtureDef();
+        f.filter.categoryBits = Fortyman.NESNE;
+        f.filter.maskBits = Fortyman.ASKER;
         CircleShape s = new CircleShape();
         s.setRadius(16);
         f.shape = s;
-        body.createFixture(f);
+        body.createFixture(f).setUserData(this);
     }
 }
