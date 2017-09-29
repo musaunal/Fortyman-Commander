@@ -39,26 +39,26 @@ public class Piyade extends AskerKalıp {
         bodyify();
     }
 
-    public void hizayaSok(float x, float y) {       // sıkıntı burada
-        if (!(body.getPosition().x > x-0.3f && body.getPosition().x < x+0.3f) && !(body.getPosition().y > y-0.3f && body.getPosition().y <y-0.3f)) {
-            body.setTransform(body.getPosition().x < x ? body.getPosition().x +1 : body.getPosition().x -1 ,
-            body.getPosition().y < y ? body.getPosition().y +1 : body.getPosition().y - 1 , 0);
-        }
-    }
-
-    /*   if (body.getPosition().x > x - 1 && body.getPosition().x < x + 1 && body.getPosition().y > y - 1 && body.getPosition().y < y + 1) {
+    public void hizayaSok(float x, float y) {       // impulse restitutiondan etkileniyor  && traverse düzgün çalışıyor
+        if (body.getPosition().x > x - 1 && body.getPosition().x < x + 1 && body.getPosition().y > y - 1 && body.getPosition().y < y + 1) {
             body.setLinearVelocity(0, 0);
             return;
         }
         if (body.getPosition().x < x)
-            body.applyLinearImpulse(new Vector2(0.5f, 0), body.getWorldCenter(), true);
+            body.applyLinearImpulse(new Vector2(0.7f, 0), body.getWorldCenter(), true);
         if (body.getPosition().x > x)
-            body.applyLinearImpulse(new Vector2(-0.5f, 0), body.getWorldCenter(), true);
+            body.applyLinearImpulse(new Vector2(-0.7f, 0), body.getWorldCenter(), true);
         if (body.getPosition().y < y)
-            body.applyLinearImpulse(new Vector2(0, 0.5f), body.getWorldCenter(), true);
+            body.applyLinearImpulse(new Vector2(0, 0.8f), body.getWorldCenter(), true);
         if (body.getPosition().y > y)
-            body.applyLinearImpulse(new Vector2(0, -0.5f), body.getWorldCenter(), true);
-    }*/
+            body.applyLinearImpulse(new Vector2(0, -0.7f), body.getWorldCenter(), true);
+    }
+//        if (!(body.getPosition().x > x-0.3f && body.getPosition().x < x+0.3f) || !(body.getPosition().y > y-0.1f && body.getPosition().y < y + 0.1f)) {
+//            body.setTransform(body.getPosition().x < x ? body.getPosition().x +1 : body.getPosition().x -1 ,
+//            body.getPosition().y < y ? body.getPosition().y +1 : body.getPosition().y - 1 , 0);
+//        }
+//    }
+
 
     public void update (float dt){
         if (Gdx.input.isKeyPressed(Input.Keys.W)){
