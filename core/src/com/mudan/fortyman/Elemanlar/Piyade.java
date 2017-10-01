@@ -3,18 +3,13 @@ package com.mudan.fortyman.Elemanlar;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 import com.mudan.fortyman.Fortyman;
-import com.mudan.fortyman.screens.PlayState;
+import com.mudan.fortyman.screens.PlayScreen;
 
 import java.util.HashMap;
 
@@ -24,7 +19,7 @@ import java.util.HashMap;
 
 public class Piyade extends AskerKalıp {
 
-    public Piyade(int askerID, PlayState state, float x , float y) {
+    public Piyade(int askerID, PlayScreen state, float x , float y) {
         this.world = state.getWorld();
         states = new HashMap<Vaziyet, TextureRegion>();
         states.put(Vaziyet.DURGUN, new TextureRegion(new Texture("warrior1.png"), 0,0,32,32));
@@ -59,7 +54,7 @@ public class Piyade extends AskerKalıp {
         }
     }
 
-    public void update (float dt){
+    public void update (){
         if (Gdx.input.isKeyPressed(Input.Keys.W)){
             if (Gdx.input.isKeyPressed(Input.Keys.D))
                 body.applyLinearImpulse(new Vector2(1,1),body.getWorldCenter(), true);

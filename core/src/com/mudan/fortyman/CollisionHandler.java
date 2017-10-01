@@ -5,6 +5,8 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.mudan.fortyman.Elemanlar.MapElemanı.DusmanOrdu;
+import com.mudan.fortyman.Elemanlar.MapElemanı.Ordu;
 
 /**
  * Created by musa on 29.09.2017.
@@ -20,8 +22,13 @@ public class CollisionHandler implements ContactListener {
 
         switch (cDef){
             case Fortyman.ASKER | Fortyman.NESNE:
-
-            // collision events
+                break;
+            case Fortyman.KUTU_ORDU | Fortyman.KUTU_DUSMAN:
+                if(fixA.getFilterData().categoryBits == Fortyman.KUTU_DUSMAN)
+                    ((Ordu) fixB.getUserData()).savasBaslat((DusmanOrdu)fixA.getUserData() );
+                else
+                    ((Ordu) fixA.getUserData()).savasBaslat((DusmanOrdu)fixB.getUserData());
+                break;
         }
     }
 

@@ -13,6 +13,8 @@ public class Fortyman extends Game {
 
 	public static final short NESNE = 2;
 	public static final short ASKER = 4;
+	public static final short KUTU_ORDU = 8;
+	public static final short KUTU_DUSMAN = 16;
 
 
 	@Override

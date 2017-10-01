@@ -5,16 +5,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mudan.fortyman.CollisionHandler;
+import com.mudan.fortyman.Elemanlar.MapElemanı.DusmanOrdu;
 import com.mudan.fortyman.Elemanlar.MapElemanı.Ordu;
 import com.mudan.fortyman.Fortyman;
-import com.sun.corba.se.internal.iiop.ORB;
 
 /**
  * Created by musa on 1.10.2017.
@@ -27,8 +26,9 @@ public class MapScreen implements Screen {
     private Viewport viewport;
     private World world;
     private Box2DDebugRenderer b2dr;
-    Ordu ordu;
+    private Ordu ordu;
     private Texture map;
+    private DusmanOrdu dusman;
 
     public MapScreen(Fortyman fortyman) {
         this.fortyman = fortyman;
@@ -44,24 +44,25 @@ public class MapScreen implements Screen {
         ordu = new Ordu(this);
         ordu.setPosition(400,400);
         map = new Texture("map.jpg");
+        dusman = new DusmanOrdu(this);
     }
 
-    @Override
-    public void show() {
-
-    }
 
     public void update(){
         ordu.update();
+        dusman.update();
         camera.update();
-        world.step(1, 6, 2);        // en soldaki elemanı küçülttükçe alengirli hesaplamalara giriyor küçülme fazla
+        world.step(10, 6, 2);        // en soldaki elemanı küçülttükçe alengirli hesaplamalara giriyor küçülme fazla
 
         if ((int)camera.position.x != ordu.body.getPosition().x  )     // eşitse posi
-            camera.position.x = ((int)camera.position.x - ordu.body.getPosition().x ) <1 ? camera.position.x + 1 : camera.position.x - 1;
+            camera.position.x = ((int)camera.position.x - (int)ordu.body.getPosition().x ) <1 ? camera.position.x + 1 : camera.position.x - 1;
         if ((int)camera.position.y != (int) ordu.body.getPosition().y  )
-            camera.position.y = ((int) camera.position.y - ordu.body.getPosition().y ) <1 ? camera.position.y + 1 : camera.position.y - 1;
+            camera.position.y = ((int) camera.position.y - (int)ordu.body.getPosition().y ) <1 ? camera.position.y + 1 : camera.position.y - 1;
 
-        Gdx.app.log("== "+ camera.position.x," "+ camera.position.y );
+        if (ordu.getSavasBasladıMı()){
+            dispose();
+            fortyman.setScreen(new PlayScreen(fortyman, this ,ordu));
+        }
     }
 
     @Override
@@ -72,9 +73,11 @@ public class MapScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         fortyman.batch.begin();
-        fortyman.batch.draw(map, 0,0,756,530);
+        fortyman.batch.draw(map, -500,-400,1756,1530);
+        ordu.draw(fortyman.batch);
+        dusman.draw(fortyman.batch);
         fortyman.batch.end();
-        b2dr.render(world, camera.combined);
+//        b2dr.render(world, camera.combined);
         fortyman.batch.setProjectionMatrix(camera.combined);
     }
 
@@ -85,7 +88,6 @@ public class MapScreen implements Screen {
 
     @Override
     public void pause() {
-
     }
 
     @Override
@@ -100,10 +102,19 @@ public class MapScreen implements Screen {
 
     @Override
     public void dispose() {
+        b2dr.dispose();
+        map.dispose();
+        ordu.army.dispose();
+        dusman.army.dispose();
         world.dispose();
     }
 
     public World getWorld(){
         return world;
+    }
+
+    @Override
+    public void show() {
+
     }
 }
