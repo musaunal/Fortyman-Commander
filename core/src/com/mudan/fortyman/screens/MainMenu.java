@@ -73,7 +73,7 @@ public class MainMenu implements Screen {
         handleInput();
         if (isStart){
             dispose();
-            fortyman.setScreen(new PlayState(fortyman));
+            fortyman.setScreen(new MapScreen(fortyman));
         }
     }
 

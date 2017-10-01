@@ -165,6 +165,11 @@ public class PlayState implements Screen{
             kameraOdakMı = true;
         }
             /*** camera hareketi biter ***/
+        /*if (Gdx.input.isKeyPressed(Input.Keys.M)){
+            dispose();
+            fortyman.setScreen(new MapScreen(fortyman));
+        }*/
+
     }
 
     public void update(float dt){
@@ -223,6 +228,7 @@ public class PlayState implements Screen{
     @Override
     public void dispose() {
 
+        world.dispose();
     }
 
     @Override

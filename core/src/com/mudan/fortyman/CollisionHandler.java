@@ -19,6 +19,8 @@ public class CollisionHandler implements ContactListener {
         int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
         switch (cDef){
+            case Fortyman.ASKER | Fortyman.NESNE:
+
             // collision events
         }
     }

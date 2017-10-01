@@ -40,7 +40,7 @@ public class Piyade extends AskerKalıp {
     }
 
     public void hizayaSok(float x, float y) {       // impulse restitutiondan etkileniyor  && traverse düzgün çalışıyor
-        if (body.getPosition().x > x - 1 && body.getPosition().x < x + 1 && body.getPosition().y > y - 1 && body.getPosition().y < y + 1) {
+      /*  if (body.getPosition().x > x - 1 && body.getPosition().x < x + 1 && body.getPosition().y > y - 1 && body.getPosition().y < y + 1) {
             body.setLinearVelocity(0, 0);
             return;
         }
@@ -52,13 +52,12 @@ public class Piyade extends AskerKalıp {
             body.applyLinearImpulse(new Vector2(0, 0.8f), body.getWorldCenter(), true);
         if (body.getPosition().y > y)
             body.applyLinearImpulse(new Vector2(0, -0.7f), body.getWorldCenter(), true);
+    }*/
+        if (!(body.getPosition().x > x-0.3f && body.getPosition().x < x+0.3f) || !(body.getPosition().y > y-0.1f && body.getPosition().y < y + 0.1f)) {
+            body.setTransform(body.getPosition().x < x ? body.getPosition().x +1 : body.getPosition().x -1 ,
+            body.getPosition().y < y ? body.getPosition().y +1 : body.getPosition().y - 1 , 0);
+        }
     }
-//        if (!(body.getPosition().x > x-0.3f && body.getPosition().x < x+0.3f) || !(body.getPosition().y > y-0.1f && body.getPosition().y < y + 0.1f)) {
-//            body.setTransform(body.getPosition().x < x ? body.getPosition().x +1 : body.getPosition().x -1 ,
-//            body.getPosition().y < y ? body.getPosition().y +1 : body.getPosition().y - 1 , 0);
-//        }
-//    }
-
 
     public void update (float dt){
         if (Gdx.input.isKeyPressed(Input.Keys.W)){
