@@ -1,25 +1,24 @@
-package com.mudan.fortyman.Elemanlar;
+package com.mudan.fortyman.Elemanlar.düşmanlar;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.mudan.fortyman.Elemanlar.AskerKalıp;
 import com.mudan.fortyman.Fortyman;
 import com.mudan.fortyman.screens.PlayScreen;
 
 import java.util.HashMap;
 
 /**
- * Created by musa on 16.09.2017.
+ * Created by musa on 2.10.2017.
  */
 
-public class Piyade extends AskerKalıp {
+public class DusmanPiyade extends AskerKalıp {
 
-    public Piyade(String askerID, PlayScreen state, float x , float y) {
+    public DusmanPiyade(String askerID, PlayScreen state, float x , float y) {
         this.world = state.getWorld();
         states = new HashMap<Vaziyet, TextureRegion>();
         states.put(Vaziyet.DURGUN, new TextureRegion(new Texture("warrior1.png"), 0,0,32,32));
@@ -50,33 +49,12 @@ public class Piyade extends AskerKalıp {
     }*/
         if (!(body.getPosition().x > x-0.3f && body.getPosition().x < x+0.3f) || !(body.getPosition().y > y-0.1f && body.getPosition().y < y + 0.1f)) {
             body.setTransform(body.getPosition().x < x ? body.getPosition().x +1 : body.getPosition().x -1 ,
-            body.getPosition().y < y ? body.getPosition().y +1 : body.getPosition().y - 1 , 0);
+                    body.getPosition().y < y ? body.getPosition().y +1 : body.getPosition().y - 1 , 0);
         }
     }
 
     public void update (){
-        if (askerID.indexOf("ordu") != -1) {
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                if (Gdx.input.isKeyPressed(Input.Keys.D))
-                    body.applyLinearImpulse(new Vector2(1, 1), body.getWorldCenter(), true);
-                else if (Gdx.input.isKeyPressed(Input.Keys.A))
-                    body.applyLinearImpulse(new Vector2(-1, 1), body.getWorldCenter(), true);
-                else
-                    body.applyLinearImpulse(new Vector2(0, 1), body.getWorldCenter(), true);
-            } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                if (Gdx.input.isKeyPressed(Input.Keys.D))
-                    body.applyLinearImpulse(new Vector2(1, -1), body.getWorldCenter(), true);
-                else if (Gdx.input.isKeyPressed(Input.Keys.A))
-                    body.applyLinearImpulse(new Vector2(-1, -1), body.getWorldCenter(), true);
-                else
-                    body.applyLinearImpulse(new Vector2(0, -1), body.getWorldCenter(), true);
-            } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                body.applyLinearImpulse(new Vector2(-1, 0), body.getWorldCenter(), true);
-            } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                body.applyLinearImpulse(new Vector2(1, 0), body.getWorldCenter(), true);
-            }
-            restitution();
-        }
+        restitution();
         setPosition(body.getPosition().x-getWidth()/2, body.getPosition().y-getHeight()/2);
     }
 
@@ -103,8 +81,8 @@ public class Piyade extends AskerKalıp {
         body = world.createBody(bodyDef);
 
         FixtureDef fdef = new FixtureDef();
-        fdef.filter.categoryBits = Fortyman.PIYADE;
-        fdef.filter.maskBits = Fortyman.NESNE |Fortyman.DUSMAN_PIYADE;
+        fdef.filter.categoryBits = Fortyman.DUSMAN_PIYADE;
+        fdef.filter.maskBits = Fortyman.NESNE | Fortyman.PIYADE;
         PolygonShape shape= new PolygonShape();
         shape.setAsBox(8,8);
         fdef.shape = shape;
@@ -114,4 +92,6 @@ public class Piyade extends AskerKalıp {
     public String getAskerID(){
         return askerID;
     }
+
+
 }

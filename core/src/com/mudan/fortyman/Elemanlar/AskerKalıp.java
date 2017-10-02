@@ -16,7 +16,7 @@ public class AskerKalıp extends Sprite {
     protected HashMap<Vaziyet, TextureRegion> states;
     public enum Vaziyet {DURGUN , MEFTA ,HUCUM ,KOS}
     protected Vaziyet suanki , onceki;
-    protected int askerID;
+    protected String askerID;
     protected World world;
     public Body body;
 
@@ -26,5 +26,8 @@ public class AskerKalıp extends Sprite {
         setRegion(states.get(vaziyet));
     }
 
+    public String getAskerID() {
+        return askerID;
+    }
 
 }

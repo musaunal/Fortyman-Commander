@@ -60,8 +60,9 @@ public class MapScreen implements Screen {
             camera.position.y = ((int) camera.position.y - (int)ordu.body.getPosition().y ) <1 ? camera.position.y + 1 : camera.position.y - 1;
 
         if (ordu.getSavasBasladıMı()){
+            dusman.setSavasBasladıMı(true);
             dispose();
-            fortyman.setScreen(new PlayScreen(fortyman, this ,ordu));
+            fortyman.setScreen(new PlayScreen(fortyman, this ,ordu ,dusman));
         }
     }
 

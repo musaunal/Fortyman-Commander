@@ -13,8 +13,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mudan.fortyman.CollisionHandler;
 import com.mudan.fortyman.Elemanlar.Bitki;
+import com.mudan.fortyman.Elemanlar.MapElemanı.DusmanOrdu;
 import com.mudan.fortyman.Elemanlar.MapElemanı.Ordu;
 import com.mudan.fortyman.Elemanlar.Piyade;
+import com.mudan.fortyman.Elemanlar.düşmanlar.DusmanPiyade;
 import com.mudan.fortyman.Fortyman;
 
 /**
@@ -27,12 +29,14 @@ public class PlayScreen implements Screen{
     private Fortyman fortyman;
     private Array<Bitki> bitkiler;
     private Ordu ordu;
+    private DusmanOrdu dusman;
     private boolean kameraOdakMı;
 
     private World world;
     private Box2DDebugRenderer b2dr;
 
-    public PlayScreen(Fortyman fortyman, MapScreen map , Ordu ordu) {
+    // to start play screen there need to be a battle betwwen to armies so that we take these parameters
+    public PlayScreen(Fortyman fortyman, MapScreen map , Ordu ordu , DusmanOrdu dusman) {
         this.fortyman = fortyman;
         camera = new OrthographicCamera();
         viewport = new FitViewport(Fortyman.WITDH , Fortyman.HEIGHT , camera);
@@ -42,15 +46,17 @@ public class PlayScreen implements Screen{
         world = new World(new Vector2(0,0), false);
         b2dr = new Box2DDebugRenderer();
         world.setContactListener(new CollisionHandler());
+        kameraOdakMı = true;
 
         this.ordu = ordu;
-        createSoldiers(40);
-        kameraOdakMı = true;
-        createBitki();
+        this.dusman = dusman;
+        generateArmy(40);
+        generateDusman(40);
+        generateBitki();
 
     }
 
-    public void createBitki (){
+    public void generateBitki(){
         bitkiler = new Array<Bitki>();
         float y=800;
         for (int i=0; i<40; i++){
@@ -60,12 +66,21 @@ public class PlayScreen implements Screen{
       }
     }
 
-    public void createSoldiers(int miktar){
+    public void generateArmy(int miktar){
         float hizaciX = 760, hizaciY = 312;
         for (int i=0; i<miktar; i++){
             if (i%10 == 0)
                 hizaciY -= 32;
-            ordu.getAskerler().add(new Piyade(i,this, hizaciX - i%10*32 , hizaciY ));
+            ordu.getAskerler().add(new Piyade(i+"ordu" ,this, hizaciX - i%10*32 , hizaciY ));
+        }
+    }
+
+    public void generateDusman(int miktar){
+        float hizaciX = 760, hizaciY = 1012;
+        for (int i=0; i<miktar; i++){
+            if (i%10 == 0)
+                hizaciY -= 32;
+            dusman.getAskerler().add(new DusmanPiyade(i+"dusman",this, hizaciX - i%10*32 , hizaciY ));
         }
     }
 
@@ -101,6 +116,7 @@ public class PlayScreen implements Screen{
         camera.update();
         world.step(1, 6, 2);        // en soldaki elemanı küçülttükçe alengirli hesaplamalara giriyor küçülme fazla
         ordu.update();
+        dusman.update();
 
         if (kameraOdakMı) {
             camera.update();
@@ -122,6 +138,7 @@ public class PlayScreen implements Screen{
 
         fortyman.batch.begin();
         ordu.draw(fortyman.batch);
+        dusman.draw(fortyman.batch);
         for (Bitki b : bitkiler)
             b.draw(fortyman.batch);
         fortyman.batch.end();

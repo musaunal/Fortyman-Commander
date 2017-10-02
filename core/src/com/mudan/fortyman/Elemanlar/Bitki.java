@@ -37,7 +37,7 @@ public class Bitki extends Sprite {
 
         FixtureDef f = new FixtureDef();
         f.filter.categoryBits = Fortyman.NESNE;
-        f.filter.maskBits = Fortyman.ASKER;
+        f.filter.maskBits = Fortyman.PIYADE;
         CircleShape s = new CircleShape();
         s.setRadius(16);
         f.shape = s;

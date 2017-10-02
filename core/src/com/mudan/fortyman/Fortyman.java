@@ -12,9 +12,11 @@ public class Fortyman extends Game {
 	public SpriteBatch batch;
 
 	public static final short NESNE = 2;
-	public static final short ASKER = 4;
+	public static final short PIYADE = 4;
 	public static final short KUTU_ORDU = 8;
 	public static final short KUTU_DUSMAN = 16;
+	public static final short DUSMAN_PIYADE = 32;
+
 
 
 	@Override

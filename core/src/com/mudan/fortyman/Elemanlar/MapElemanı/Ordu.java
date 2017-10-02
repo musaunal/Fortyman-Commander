@@ -185,7 +185,8 @@ public class Ordu extends Sprite {
 
     @Override
     public void draw(Batch batch) {
-        super.draw(batch);
+        if (!savasBasladıMı)
+            super.draw(batch);
         if (savasBasladıMı)
             for (Piyade asker : askerler){
                 asker.draw(batch);
