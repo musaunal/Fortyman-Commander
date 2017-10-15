@@ -12,6 +12,7 @@ import com.mudan.fortyman.Fortyman;
 import com.mudan.fortyman.screens.PlayScreen;
 
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Created by musa on 2.10.2017.
@@ -20,7 +21,7 @@ import java.util.HashMap;
 public class DusmanPiyade extends AskerKalıp {
 
     public DusmanPiyade(String askerID, PlayScreen state, float x , float y) {
-        super(x,y);
+        super((float)(Math.random()*10)/8+0.07f);
         this.world = state.getWorld();
         this.askerID = askerID;
 

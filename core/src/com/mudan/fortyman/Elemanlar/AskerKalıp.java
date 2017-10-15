@@ -28,34 +28,34 @@ public class AskerKalıp extends Sprite {
     protected Array<TextureRegion> frames;
     protected float stateTimer = 0;
 
-    public AskerKalıp (float x , float y){
+    public AskerKalıp (float timer ){
         frames = new Array<TextureRegion>();
         for (int i=0; i<10; i++){
             frames.add(new TextureRegion(new Texture("hucum.png"), i*32, 0, 32, 32));
         }for (int i=9; i>=0; i--){
             frames.add(new TextureRegion(new Texture("hucum.png"), i*32, 0, 32, 32));
-        }hucum = new Animation<TextureRegion>(0.1f, frames);
+        }hucum = new Animation<TextureRegion>(timer, frames);
         frames.clear();
 
         for (int i=0; i<10; i++){
             frames.add(new TextureRegion(new Texture("dur.png"), i*32, 0, 32, 32));
         }for (int i=9; i>=0; i--){
             frames.add(new TextureRegion(new Texture("dur.png"), i*32, 0, 32, 32));
-        }dur = new Animation<TextureRegion>(0.1f, frames);
+        }dur = new Animation<TextureRegion>(timer, frames);
         frames.clear();
 
         for (int i=0; i<10; i++){
             frames.add(new TextureRegion(new Texture("kos.png"), i*32, 0, 32, 32));
         }for (int i=9; i>=0; i--){
             frames.add(new TextureRegion(new Texture("kos.png"), i*32, 0, 32, 32));
-        }kos = new Animation<TextureRegion>(0.1f, frames);
+        }kos = new Animation<TextureRegion>(timer, frames);
         frames.clear();
 
         for (int i=0; i<10; i++){
             frames.add(new TextureRegion(new Texture("mefta.png"), i*32, 0, 32, 32));
         }for (int i=9; i>=0; i--){
             frames.add(new TextureRegion(new Texture("mefta.png"), i*32, 0, 32, 32));
-        }mefta = new Animation<TextureRegion>(0.1f, frames);
+        }mefta = new Animation<TextureRegion>(timer, frames);
 
         states = new HashMap<Vaziyet, Animation<TextureRegion>>();
         states.put(Vaziyet.DURGUN, dur);

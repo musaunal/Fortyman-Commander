@@ -20,7 +20,7 @@ import java.util.HashMap;
 public class Piyade extends AskerKalıp {
 
     public Piyade(String askerID, PlayScreen state, float x , float y) {
-        super(x,y);
+        super((float)(Math.random()*10)/8+0.07f);
         this.world = state.getWorld();
         this.askerID = askerID;
         setBounds(x,y,32,32);
