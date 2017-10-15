@@ -115,8 +115,8 @@ public class PlayScreen implements Screen{
         handleInput();
         camera.update();
         world.step(1, 6, 2);        // en soldaki elemanı küçülttükçe alengirli hesaplamalara giriyor küçülme fazla
-        ordu.update();
-        dusman.update();
+        ordu.update(dt);
+        dusman.update(dt);
 
         if (kameraOdakMı) {
             camera.update();

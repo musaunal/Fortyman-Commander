@@ -30,18 +30,17 @@ public class DusmanOrdu extends Sprite {
     public DusmanOrdu (MapScreen screen){
         world = screen.getWorld();
         army = new Texture("9.png");
-        setBounds(900,1000,80,40);
+        setBounds(600,500,80,40);
         setRegion(army);
-
 //            Gdx.app.log(" T" + getX(), " " +getY());
         bodyify();
         askerler = new Array<DusmanPiyade>();
     }
 
-    public void update(){
+    public void update(float dt){
         if (savasBasladıMı){
             for (DusmanPiyade asker :askerler)
-                asker.update();
+                asker.update(dt);
         }else {
             restitution();
             setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);

@@ -1,5 +1,6 @@
 package com.mudan.fortyman;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -24,11 +25,11 @@ public class CollisionHandler implements ContactListener {
 
         switch (cDef){
             case Fortyman.PIYADE | Fortyman.NESNE:
-                if(fixA.getFilterData().categoryBits == Fortyman.PIYADE)
-                    ((Piyade) fixA.getUserData()).setState(AskerKalıp.Vaziyet.KOS);
+           /*     if(fixA.getFilterData().categoryBits == Fortyman.PIYADE)
+                    ((Piyade) fixA.getUserData()).setState(AskerKalıp.Vaziyet.KOS, Gdx.graphics.getDeltaTime());
                 else
-                    ((Piyade) fixB.getUserData()).setState(AskerKalıp.Vaziyet.KOS);
-                break;
+                    ((Piyade) fixB.getUserData()).setState(AskerKalıp.Vaziyet.KOS, Gdx.graphics.getDeltaTime());
+               */ break;
             case Fortyman.KUTU_ORDU | Fortyman.KUTU_DUSMAN:
                 if(fixA.getFilterData().categoryBits == Fortyman.KUTU_DUSMAN)
                     ((Ordu) fixB.getUserData()).savasBaslat((DusmanOrdu)fixA.getUserData() );
@@ -37,9 +38,9 @@ public class CollisionHandler implements ContactListener {
                 break;
             case Fortyman.PIYADE | Fortyman.DUSMAN_PIYADE:
                 if(fixA.getFilterData().categoryBits == Fortyman.PIYADE)
-                    ((Piyade) fixA.getUserData()).setState(AskerKalıp.Vaziyet.HUCUM);
+                    ((Piyade) fixA.getUserData()).setState(AskerKalıp.Vaziyet.HUCUM, Gdx.graphics.getDeltaTime());
                 else
-                    ((Piyade) fixB.getUserData()).setState(AskerKalıp.Vaziyet.HUCUM);
+                    ((Piyade) fixB.getUserData()).setState(AskerKalıp.Vaziyet.MEFTA, Gdx.graphics.getDeltaTime());
                 break;
         }
     }

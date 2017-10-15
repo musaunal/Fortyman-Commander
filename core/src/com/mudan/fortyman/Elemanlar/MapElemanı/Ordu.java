@@ -77,11 +77,11 @@ public class Ordu extends Sprite {
         }
     }
 
-    public void update(){
+    public void update(float dt){
         if (savasBasladıMı){
             formatcı();
             for (Piyade asker :askerler)
-                asker.update();
+                asker.update(dt);
         }else{
             restitution();
             setPosition(body.getPosition().x-getWidth()/2, body.getPosition().y-getHeight()/2);

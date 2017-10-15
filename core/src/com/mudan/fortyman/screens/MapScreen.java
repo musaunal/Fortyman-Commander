@@ -48,9 +48,9 @@ public class MapScreen implements Screen {
     }
 
 
-    public void update(){
-        ordu.update();
-        dusman.update();
+    public void update(float dt){
+        ordu.update(dt);
+        dusman.update(dt);
         camera.update();
         world.step(10, 6, 2);        // en soldaki elemanı küçülttükçe alengirli hesaplamalara giriyor küçülme fazla
 
@@ -68,7 +68,7 @@ public class MapScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        update();
+        update(delta);
 //        Gdx.gl.glClearColor(108 / 255f, 180 / 255f, 196 / 255f, 1);
         Gdx.gl.glClearColor(0,0,0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

@@ -1,5 +1,6 @@
 package com.mudan.fortyman.Elemanlar.düşmanlar;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -19,17 +20,11 @@ import java.util.HashMap;
 public class DusmanPiyade extends AskerKalıp {
 
     public DusmanPiyade(String askerID, PlayScreen state, float x , float y) {
+        super(x,y);
         this.world = state.getWorld();
-        states = new HashMap<Vaziyet, TextureRegion>();
-        states.put(Vaziyet.DURGUN, new TextureRegion(new Texture("warrior1.png"), 0,0,32,32));
-        states.put(Vaziyet.HUCUM, new TextureRegion(new Texture("warrior1.png"), 96,0,32,32));
-        states.put(Vaziyet.KOS, new TextureRegion(new Texture("warrior1.png"), 32,0,32,32));
-        states.put(Vaziyet.MEFTA, new TextureRegion(new Texture("warrior1.png"), 128,0,32,32));
         this.askerID = askerID;
 
-        suanki = onceki = Vaziyet.DURGUN;
         setBounds(x,y,32,32);
-        setRegion(states.get(Vaziyet.DURGUN));
         bodyify();
     }
 
@@ -53,9 +48,11 @@ public class DusmanPiyade extends AskerKalıp {
         }
     }
 
-    public void update (){
+    public void update (float dt){
+        setState(Vaziyet.KOS, dt);
         restitution();
         setPosition(body.getPosition().x-getWidth()/2, body.getPosition().y-getHeight()/2);
+        stateTimer = onceki == suanki ? stateTimer + dt : 0;
     }
 
     public void restitution(){          //  yavaşlatmak için geçiçi yüzeyin sürtünme kuvveti
