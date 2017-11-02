@@ -66,8 +66,9 @@ public class PlayScreen implements Screen{
       }
     }
 
-    public void generateArmy(int miktar){
+    public void generateArmy(int miktar){       // cavusa göre düzelt
         float hizaciX = 760, hizaciY = 312;
+        ordu.getCavus().cavusUret(600,332,this);
         for (int i=0; i<miktar; i++){
             if (i%10 == 0)
                 hizaciY -= 32;

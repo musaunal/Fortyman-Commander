@@ -28,6 +28,10 @@ public class AskerKalıp extends Sprite {
     protected Array<TextureRegion> frames;
     protected float stateTimer = 0;
 
+    protected String askerID;
+    protected World world;
+    public Body body;
+
     public AskerKalıp (float timer ){
         frames = new Array<TextureRegion>();
         for (int i=0; i<10; i++){
@@ -66,10 +70,6 @@ public class AskerKalıp extends Sprite {
         suanki = onceki = Vaziyet.DURGUN;
         setState(Vaziyet.DURGUN, Gdx.graphics.getDeltaTime());
     }
-
-    protected String askerID;
-    protected World world;
-    public Body body;
 
     public void setState(Vaziyet vaziyet, float dt){
         suanki = vaziyet;

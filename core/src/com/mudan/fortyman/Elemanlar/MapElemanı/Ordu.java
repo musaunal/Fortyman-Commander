@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mudan.fortyman.Elemanlar.AskerKalıp;
 import com.mudan.fortyman.Elemanlar.Bitki;
+import com.mudan.fortyman.Elemanlar.Cavus;
 import com.mudan.fortyman.Elemanlar.Piyade;
 import com.mudan.fortyman.Fortyman;
 import com.mudan.fortyman.screens.MapScreen;
@@ -28,14 +29,14 @@ public class Ordu extends Sprite {
     protected World world;
     public Body body;
     public Texture army;
+    protected Cavus cavus;
     private Array<Piyade> askerler;
     protected boolean savasBasladıMı;
 
-    public enum Format {DEFAULT , KISKAC}
+    public enum Format {DEFAULT , KISKAC , HAREKET}
     private Format vaziyet;
     private boolean formatDegisMi;
     private boolean ready;      // format değişimi bitti mi
-
 
     public Ordu (MapScreen screen){
         world = screen.getWorld();
@@ -44,6 +45,7 @@ public class Ordu extends Sprite {
         setRegion(army);
         savasBasladıMı = false;
         bodyify();
+        cavus = new Cavus();
         askerler = new Array<Piyade>();
         vaziyet = Format.DEFAULT;
         formatDegisMi = false;
@@ -69,7 +71,8 @@ public class Ordu extends Sprite {
                 vaziyet = Format.KISKAC;
                 formatDegisMi = true;
                 ready = false;
-            }if (Gdx.input.isKeyPressed(Input.Keys.E)) {      // koordiantları loglar
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.E)) {      // koordiantları loglar
                 for (Piyade asker : askerler) {
                     Gdx.app.log("sayı" + asker.getAskerID(), ": " + asker.getX() + " " + asker.getY());
                 }
@@ -80,6 +83,7 @@ public class Ordu extends Sprite {
     public void update(float dt){
         if (savasBasladıMı){
             formatcı();
+            cavus.update(dt);
             for (Piyade asker :askerler)
                 asker.update(dt);
         }else{
@@ -91,13 +95,13 @@ public class Ordu extends Sprite {
     }
 
     public boolean defaultFormasyon(){             // dikdörtgen dizilim
-        float hizaciX = askerler.get(0).body.getPosition().x, hizaciY = askerler.get(0).body.getPosition().y+32;
+      float hizaciX = cavus.body.getPosition().x +160 ,
+            hizaciY = cavus.body.getPosition().y -10;
         for (int i=0; i<40; i++){
             if (i %10 == 0)
                 hizaciY -=32;
             askerler.get(i).hizayaSok(hizaciX - i%10*32, hizaciY);
-        }
-        if(Math.abs(askerler.get(0).getX() - askerler.get(1).getX() -32) <= 2)
+        }if(Math.abs(askerler.get(0).getX() - askerler.get(1).getX() -32) <= 2)
             return true;
         else
             return false;
@@ -105,10 +109,10 @@ public class Ordu extends Sprite {
 
     public boolean kıskacFormasyon(){
         int sayac =0;
-        float hizaciX = askerler.get(0).body.getPosition().x,
-                hizaciY = askerler.get(0).body.getPosition().y,
-                simetri = -288,
-                temp = hizaciX;
+        float hizaciX = cavus.body.getPosition().x +160,
+              hizaciY = cavus.body.getPosition().y -10,
+              simetri = -288,
+              temp = hizaciX;
         for (int i=1; i<6; i++) {
             for (int j = 0; j <i ; j++) {
                 askerler.get(sayac).hizayaSok(hizaciX, hizaciY);
@@ -188,6 +192,7 @@ public class Ordu extends Sprite {
         if (!savasBasladıMı)
             super.draw(batch);
         if (savasBasladıMı)
+            cavus.draw(batch);
             for (Piyade asker : askerler){
                 asker.draw(batch);
             }
@@ -204,4 +209,6 @@ public class Ordu extends Sprite {
     public Array<Piyade> getAskerler() {
         return askerler;
     }
+
+    public Cavus getCavus() { return  cavus;}
 }
